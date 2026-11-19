@@ -158,28 +158,16 @@ section { padding: 88px 0; }
 	.compare thead th:not(:first-child), .compare td:not(:first-child) { width: 60px; }
 }
 
-/* Spotlight + Pro grid */
-.spotlight { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center; margin: 48px 0 24px; padding: 40px; border-radius: 24px; background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, var(--brand), var(--brand-2)) border-box; border: 2px solid transparent; box-shadow: var(--shadow); }
-.tag-hot { color: #fff; background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
-.timeline { margin-top: 20px; display: grid; gap: 10px; }
-.tl-row { display: flex; align-items: center; gap: 8px; }
-.tl-label { width: 70px; font-size: 13px; font-weight: 700; color: var(--ink); }
-.tl-dot { flex: 1; text-align: center; font-size: 13px; font-weight: 600; padding: 7px 0; border-radius: 8px; background: #f1eff8; color: #b3afc9; }
-.tl-dot.on { background: var(--brand); color: #fff; }
-.tl-dot.ship { background: #fce7f3; color: var(--brand-2); }
-.hl-hot { border-color: rgba(233, 213, 255, .6); background: rgba(219, 39, 119, .12); }
-.pro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
-.pro-group { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 12px; background: #fff; }
-.pro-group h4 { font-size: 17px; margin-bottom: 12px; }
-.pro-group ul { list-style: none; margin: 0; padding: 0; }
-.pro-group li { position: relative; padding: 0 0 10px 24px; font-size: 15px; }
-.pro-group li::before { content: "✓"; position: absolute; left: 0; color: var(--brand); font-weight: 800; }
-.pro-group li.hot { font-weight: 700; color: var(--brand-2); }
-.pro-group li.hot::after { content: "Highlight"; margin-left: 8px; font-size: 11px; font-weight: 700; color: #fff; background: var(--brand-2); border-radius: 999px; padding: 2px 8px; vertical-align: 2px; }
-.pro-group.free { background: var(--soft); }
-.feature { padding: 44px 0; }
-@media (max-width: 960px) { .spotlight { grid-template-columns: 1fr; padding: 24px; gap: 28px; } .pro-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 600px) { .pro-grid { grid-template-columns: 1fr; } .spotlight { padding: 20px; } }
+/* Remaining Pro features */
+.mini-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 48px; }
+.mini { border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: var(--soft); }
+.mini .mi { font-size: 22px; }
+.mini h4 { font-size: 15px; margin: 8px 0 4px; }
+.mini p { margin: 0; font-size: 14px; line-height: 1.5; }
+.feature { padding: 40px 0; }
+@media (max-width: 1100px) { .mini-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px) { .mini-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px) { .mini-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -193,7 +181,6 @@ section { padding: 88px 0; }
 			<p class="lead">Turn one-time buyers into monthly revenue. Sell subscription products, charge renewals automatically with Stripe and PayPal, and keep more subscribers with recurring coupons, a cancellation survey and retention offers.</p>
 			<ul class="pills">
 				<li>Stripe &amp; PayPal auto-renewals</li>
-				<li>Shipping schedule</li>
 				<li>Recurring coupons</li>
 				<li>Cancellation survey</li>
 				<li>Import &amp; export</li>
@@ -218,12 +205,12 @@ section { padding: 88px 0; }
 			<h2>Everything a subscription business needs</h2>
 		</div>
 		<div class="hl-grid">
-			<div class="hl hl-hot"><div class="ic">🚚</div><h3>Separate shipping schedule</h3><p>Bill quarterly or yearly, ship every month. In-between shipments are created as $0 orders.</p></div>
 			<div class="hl"><div class="ic">💳</div><h3>Stripe &amp; PayPal renewals</h3><p>Cards and PayPal accounts are saved at checkout and charged automatically on every renewal date.</p></div>
 			<div class="hl"><div class="ic">🏷️</div><h3>Recurring coupons</h3><p>Discount the first 3 months, every payment, or the sign-up fee. You decide how many renewals get the discount.</p></div>
 			<div class="hl"><div class="ic">💬</div><h3>Cancellation survey</h3><p>Learn why customers leave, and show a retention offer that wins them back before they cancel.</p></div>
 			<div class="hl"><div class="ic">⇅</div><h3>Import &amp; export</h3><p>Move from WooCommerce Subscriptions, YITH or SUMO, back up to CSV, or schedule automatic exports.</p></div>
 			<div class="hl"><div class="ic">🔁</div><h3>Smart payment retries</h3><p>Failed renewals are retried only when the card can still succeed.</p></div>
+			<div class="hl"><div class="ic">👤</div><h3>Customer self-service</h3><p>Customers pause, resume, switch plans, renew early and update their card from My Account.</p></div>
 					</div>
 	</div>
 </section>
@@ -236,20 +223,6 @@ section { padding: 88px 0; }
 			<h2>Built to grow and keep recurring revenue</h2>
 		</div>
 
-		<!-- Spotlight: Shipping schedule -->
-		<div class="spotlight">
-			<div class="f-text">
-				<span class="tag tag-hot">★ Spotlight</span>
-				<h3>Separate shipping schedule</h3>
-				<p>Bill on one schedule, ship on another. Charge $90 every 3 months and ship a box every month. Shipments in between are created as $0 orders, ready to fulfil.</p>
-				<div class="timeline" aria-label="Billed every 3 months, shipped every month">
-					<div class="tl-row"><span class="tl-label">Billed</span><span class="tl-dot on">Jan</span><span class="tl-dot">Feb</span><span class="tl-dot">Mar</span><span class="tl-dot on">Apr</span></div>
-					<div class="tl-row"><span class="tl-label">Shipped</span><span class="tl-dot ship">Jan</span><span class="tl-dot ship">Feb</span><span class="tl-dot ship">Mar</span><span class="tl-dot ship">Apr</span></div>
-				</div>
-			</div>
-			<div class="shot"><img src="images/shipping-schedule.png" alt="Product set to bill every 3 months and ship every month" loading="lazy"></div>
-		</div>
-
 		<!-- Stripe & PayPal -->
 		<div class="feature">
 			<div class="f-text">
@@ -258,71 +231,30 @@ section { padding: 88px 0; }
 				<p>The customer pays once at checkout. Every renewal is charged automatically.</p>
 				<ul>
 					<li>WooCommerce Stripe Gateway and PayPal Payments</li>
-					<li>Smart retries for failed payments</li>
-					<li>Card expiry reminders and Update Card page</li>
+					<li>Manual renewals with invoice emails for other gateways</li>
 				</ul>
 			</div>
 			<div class="shot"><img src="images/settings-payment.png" alt="Payment settings for Stripe and PayPal" loading="lazy"></div>
 		</div>
 
-		<!-- Coupons -->
+		<!-- Variable products -->
 		<div class="feature flip">
 			<div class="f-text">
-				<span class="tag">Marketing</span>
-				<h3>Subscription coupon codes</h3>
-				<p>Discount the recurring price or the sign-up fee, for as many payments as you choose.</p>
-				<ul>
-					<li>Recurring % or fixed discount</li>
-					<li>Limit to the first N payments</li>
-					<li>Sign-up fee discounts</li>
-				</ul>
+				<span class="tag">Products</span>
+				<h3>Variable subscription products</h3>
+				<p>Sell several plans in one product. Each variation has its own price, billing schedule, length, sign-up fee and trial.</p>
 			</div>
-			<div class="shot"><img src="images/coupon.png" alt="Coupon with a recurring discount limited to 3 payments" loading="lazy"></div>
+			<div class="shot"><img src="images/product-variations.png" alt="Subscription fields on a product variation" loading="lazy"></div>
 		</div>
 
-		<!-- Cancellation survey -->
+		<!-- Shipping schedule -->
 		<div class="feature">
 			<div class="f-text">
-				<span class="tag">Retention</span>
-				<h3>Cancellation survey &amp; retention offer</h3>
-				<p>Ask why customers leave, and offer a discount to stay before they cancel.</p>
-				<ul>
-					<li>Ready-made reasons plus comments</li>
-					<li>One-click "Accept offer and stay"</li>
-					<li>Cancellations report with save rate</li>
-				</ul>
+				<span class="tag">Products</span>
+				<h3>Separate shipping schedule</h3>
+				<p>Bill quarterly or yearly and ship every month. Shipments in between are created as $0 orders, ready to fulfil.</p>
 			</div>
-			<div class="shot crop"><img src="images/myaccount-cancel.png" alt="Cancel page with survey and retention offer" loading="lazy"></div>
-		</div>
-
-		<!-- Import / export -->
-		<div class="feature flip">
-			<div class="f-text">
-				<span class="tag">Data</span>
-				<h3>Import, export &amp; migration</h3>
-				<p>Move subscriptions in or out in minutes. Every row is checked before it's saved.</p>
-				<ul>
-					<li>From WooCommerce Subscriptions, YITH, SUMO or CSV</li>
-					<li>CSV, JSON, XML, Excel XML and ZIP</li>
-					<li>Scheduled daily, weekly or monthly backups</li>
-				</ul>
-			</div>
-			<div class="shot"><img src="images/import-step3-preview.png" alt="Import preview showing valid, existing and invalid rows" loading="lazy"></div>
-		</div>
-
-		<!-- Plan switching -->
-		<div class="feature">
-			<div class="f-text">
-				<span class="tag">Customers</span>
-				<h3>Plan switching with proration</h3>
-				<p>Customers upgrade or downgrade on their own. Upgrades pay only the difference.</p>
-				<ul>
-					<li>Variable subscription products</li>
-					<li>Renew early and resubscribe</li>
-					<li>Auto-renew toggle and pause limits</li>
-				</ul>
-			</div>
-			<div class="shot crop"><img src="images/myaccount-switch.png" alt="Switch plan page in My Account" loading="lazy"></div>
+			<div class="shot"><img src="images/shipping-schedule.png" alt="Product billed every 3 months and shipped every month" loading="lazy"></div>
 		</div>
 
 		<!-- Price change -->
@@ -335,67 +267,101 @@ section { padding: 88px 0; }
 			<div class="shot"><img src="images/product-price-change.png" alt="Existing subscribers price change box" loading="lazy"></div>
 		</div>
 
-		<!-- All Pro features -->
-		<div class="center" style="margin-top:72px">
-			<span class="eyebrow">Everything in Pro</span>
-			<h2>All Pro features</h2>
+		<!-- Coupons -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Marketing</span>
+				<h3>Subscription coupon codes</h3>
+				<p>Discount the recurring price or the sign-up fee, for as many payments as you choose.</p>
+				<ul>
+					<li>Recurring % or fixed discount</li>
+					<li>Limit to the first N payments</li>
+					<li>Sign-up fee % or fixed discount</li>
+				</ul>
+			</div>
+			<div class="shot"><img src="images/coupon.png" alt="Coupon with a recurring discount limited to 3 payments" loading="lazy"></div>
 		</div>
-		<div class="pro-grid">
-			<div class="pro-group">
-				<h4>📦 Products</h4>
+
+		<!-- Cancellation survey -->
+		<div class="feature flip">
+			<div class="f-text">
+				<span class="tag">Retention</span>
+				<h3>Cancellation survey &amp; retention offer</h3>
+				<p>Ask why customers leave, and offer a discount to stay before they cancel.</p>
 				<ul>
-					<li>Variable subscription products</li>
-					<li class="hot">Separate shipping schedule</li>
-					<li>Price change for existing subscribers</li>
+					<li>Ready-made reasons plus comments</li>
+					<li>One-click "Accept offer and stay"</li>
 				</ul>
 			</div>
-			<div class="pro-group">
-				<h4>💳 Payments</h4>
+			<div class="shot crop"><img src="images/myaccount-cancel.png" alt="Cancel page with survey and retention offer" loading="lazy"></div>
+		</div>
+
+		<!-- Cancellations report -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Reports</span>
+				<h3>Cancellations report</h3>
+				<p>See how many subscribers cancelled, why they left, and how many your retention offer saved.</p>
+			</div>
+			<div class="shot crop"><img src="images/cancellations.png" alt="Cancellations report" loading="lazy"></div>
+		</div>
+
+		<!-- CSV report exports -->
+		<div class="feature flip">
+			<div class="f-text">
+				<span class="tag">Reports</span>
+				<h3>CSV report exports</h3>
+				<p>Download payments, a monthly summary and cancellations for any period. Opens in Excel and Google Sheets.</p>
+			</div>
+			<div class="shot"><img src="images/exports.png" alt="Report exports page" loading="lazy"></div>
+		</div>
+
+		<!-- Mailchimp & Klaviyo -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Integrations</span>
+				<h3>Mailchimp &amp; Klaviyo sync</h3>
+				<p>Subscribers are synced and tagged by status (Active, Trial, Cancelled…) and product, so you can email each group.</p>
+			</div>
+			<div class="shot crop"><img src="images/settings-integrations.png" alt="Mailchimp and Klaviyo integration settings" loading="lazy"></div>
+		</div>
+
+		<!-- Plan switching -->
+		<div class="feature flip">
+			<div class="f-text">
+				<span class="tag">Customers</span>
+				<h3>Plan switching with proration</h3>
+				<p>Customers upgrade or downgrade on their own. Upgrades pay only the difference; downgrades start at the next payment.</p>
+			</div>
+			<div class="shot crop"><img src="images/myaccount-switch.png" alt="Switch plan page in My Account" loading="lazy"></div>
+		</div>
+
+		<!-- Import / export -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Data</span>
+				<h3>Import, export &amp; migration</h3>
+				<p>Move from WooCommerce Subscriptions, YITH, SUMO or a CSV file. Every row is checked before it's saved.</p>
 				<ul>
-					<li>Smart retries by decline reason</li>
-					<li>Card expiry reminders</li>
-					<li>Update Card page</li>
-					<li>Card Expiring &amp; Price Changed emails</li>
+					<li>CSV, JSON, XML, Excel XML and ZIP</li>
+					<li>Scheduled daily, weekly or monthly backups</li>
 				</ul>
 			</div>
-			<div class="pro-group">
-				<h4>👤 Customers</h4>
-				<ul>
-					<li>Plan switching with proration</li>
-					<li>Renew early</li>
-					<li>Resubscribe</li>
-					<li>Auto-renew on/off toggle</li>
-					<li>Pause limit per subscription</li>
-				</ul>
-			</div>
-			<div class="pro-group">
-				<h4>🏷️ Marketing &amp; retention</h4>
-				<ul>
-					<li>Recurring coupons</li>
-					<li>Sign-up fee coupons</li>
-					<li>One free trial per customer</li>
-					<li>Cancellation survey</li>
-					<li>Retention offer</li>
-					<li>Mailchimp &amp; Klaviyo sync</li>
-				</ul>
-			</div>
-			<div class="pro-group">
-				<h4>📊 Reports &amp; help</h4>
-				<ul>
-					<li>Cancellations report</li>
-					<li>CSV exports: payments, monthly summary, cancellations</li>
-					<li>In-plugin Help tab</li>
-				</ul>
-			</div>
-			<div class="pro-group free">
-				<h4>✅ Also included (free core)</h4>
-				<ul>
-					<li>Stripe &amp; PayPal auto-renewals</li>
-					<li>Free trials, sign-up fees, billing sync</li>
-					<li>Import / export &amp; webhooks</li>
-					<li>Dashboard &amp; 26 emails</li>
-				</ul>
-			</div>
+			<div class="shot"><img src="images/import-step3-preview.png" alt="Import preview showing valid, existing and invalid rows" loading="lazy"></div>
+		</div>
+
+		<!-- Remaining Pro features -->
+		<div class="mini-grid">
+			<div class="mini"><span class="mi">🔁</span><h4>Smart retries</h4><p>Retry failed renewals by decline reason; skip cards that can't succeed.</p></div>
+			<div class="mini"><span class="mi">💳</span><h4>Card expiry reminders</h4><p>Email customers before their saved card expires.</p></div>
+			<div class="mini"><span class="mi">🔒</span><h4>Update Card page</h4><p>Customers replace their card securely from My Account.</p></div>
+			<div class="mini"><span class="mi">✉️</span><h4>Card Expiring &amp; Price Changed emails</h4><p>Two extra emails, editable in WooCommerce.</p></div>
+			<div class="mini"><span class="mi">⏩</span><h4>Renew early</h4><p>Customers pay their next renewal ahead of time.</p></div>
+			<div class="mini"><span class="mi">↩️</span><h4>Resubscribe</h4><p>Restart a cancelled or expired subscription in one click.</p></div>
+			<div class="mini"><span class="mi">🔘</span><h4>Auto-renew toggle</h4><p>Customers turn automatic renewal on or off.</p></div>
+			<div class="mini"><span class="mi">⏸️</span><h4>Pause limit</h4><p>Set how many times a subscription can be paused.</p></div>
+			<div class="mini"><span class="mi">🎁</span><h4>One free trial per customer</h4><p>Limit trials per product or per store.</p></div>
+			<div class="mini"><span class="mi">❓</span><h4>In-plugin Help tab</h4><p>Docs, FAQs and video tutorials inside the plugin.</p></div>
 		</div>
 	</div>
 </section>
