@@ -1,0 +1,544 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Open+Sans:wght@400;600&display=block" rel="stylesheet">
+<style>
+:root { --blue:#0a6cff; --navy:#1b2140; --gray:#8a93a6; --line:#dfe6f0; --soft:#eaf1fb; --green:#12b76a; --red:#f04438; --amber:#f5a524; }
+* { box-sizing:border-box; margin:0; }
+html,body { width:1280px; height:1120px; overflow:hidden; background:#fff; }
+body { font-family:Quicksand, sans-serif; color:var(--navy); }
+#stage { position:relative; width:1280px; height:1120px; overflow:hidden; background:#fff; }
+.blob { position:absolute; border-radius:50%; background:var(--soft); }
+.dots { position:absolute; width:270px; height:240px; background-image:radial-gradient(#b9cdf0 2.4px, transparent 2.6px); background-size:28px 28px; }
+.win { position:absolute; background:#fff; border-radius:28px; box-shadow:0 30px 70px -20px rgba(27,60,120,.25), 0 2px 8px rgba(27,60,120,.06); overflow:hidden; }
+.win-h { height:66px; background:#f4f7fb; border-bottom:1.5px solid #e6ecf4; display:flex; align-items:center; padding:0 28px; gap:10px; }
+.tl { width:17px; height:17px; border-radius:50%; } .tl.r{background:#ff5f57}.tl.y{background:#febc2e}.tl.g{background:#28c840}
+.win-t { margin-left:22px; font-weight:700; font-size:21px; }
+.url { margin-left:22px; flex:1; height:36px; border:1.5px solid #e1e7f0; border-radius:18px; background:#fff; color:var(--gray); font:17px "Open Sans"; display:flex; align-items:center; padding:0 18px; }
+.win-b { padding:30px 40px 36px; }
+.card { position:absolute; background:#fff; border-radius:24px; padding:30px 32px; box-shadow:0 30px 70px -22px rgba(27,60,120,.28), 0 2px 8px rgba(27,60,120,.06); }
+.badge { position:absolute; width:104px; height:104px; border-radius:50%; background:var(--blue); display:grid; place-items:center; box-shadow:0 16px 36px -8px rgba(10,108,255,.55); }
+.badge svg { width:48px; height:48px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.ic { width:26px; height:26px; stroke:var(--blue); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+.lbl { font-weight:600; font-size:22px; margin:0 0 12px; }
+.fld { height:70px; border:2px solid #e1e7f0; border-radius:16px; display:flex; align-items:center; padding:0 24px; font:23px "Open Sans"; color:var(--navy); margin-bottom:26px; position:relative; background:#fff; }
+.fld.ph { color:#a9b1c1; }
+.fld .suf { position:absolute; right:0; top:0; bottom:0; width:80px; border-left:2px solid #e1e7f0; background:#f6f8fb; display:grid; place-items:center; font:700 22px Quicksand; border-radius:0 14px 14px 0; }
+.fld .chev { position:absolute; right:24px; top:24px; width:14px; height:14px; border-right:3px solid #8a93a6; border-bottom:3px solid #8a93a6; transform:rotate(45deg); }
+.fld.focus { border-color:var(--blue); box-shadow:0 0 0 4px rgba(10,108,255,.12); }
+.fld.focus[data-on]:not(.on) { border-color:#e1e7f0; box-shadow:none; }
+.caret { display:inline-block; width:2px; height:28px; background:var(--blue); margin-left:2px; vertical-align:middle; }
+.seg { display:flex; background:#f1f4f9; border:2px solid #e6ebf3; border-radius:18px; padding:7px; margin-bottom:26px; }
+.seg > div { flex:1; text-align:center; padding:15px 6px; border-radius:13px; font-weight:700; font-size:21px; color:#8a93a6; }
+.seg > div.on { background:#fff; color:var(--blue); box-shadow:0 6px 16px -6px rgba(27,60,120,.25); }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; height:70px; padding:0 34px; border-radius:16px; background:var(--blue); color:#fff; font-weight:700; font-size:24px; }
+.btn.ghost { background:#fff; color:var(--blue); border:2px solid var(--blue); }
+.btn.green { background:var(--green); }
+.btn.wide { width:100%; }
+.btn.press { transform:scale(.95); filter:brightness(.92); }
+.row { display:flex; align-items:center; gap:16px; }
+.between { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.muted { color:var(--gray); }
+.eyebrow { font-weight:700; font-size:19px; letter-spacing:.12em; color:var(--blue); text-transform:uppercase; margin-bottom:18px; }
+.big { font-weight:700; font-size:44px; color:var(--blue); }
+.h { font-weight:700; font-size:30px; }
+.t20 { font-size:20px; } .t22 { font-size:22px; } .t24 { font-size:24px; } .t26{font-size:26px;}
+.b { font-weight:700; }
+.list > div { padding:18px 0; border-bottom:2px solid #eef2f7; font-size:22px; }
+.list > div:last-child { border-bottom:0; }
+.pill { display:inline-flex; align-items:center; gap:8px; padding:7px 16px; border-radius:999px; font-weight:700; font-size:18px; }
+.p-green { background:#e6f8ef; color:var(--green); } .p-red { background:#fdecea; color:var(--red); } .p-blue { background:#e8f1ff; color:var(--blue); } .p-gray { background:#f1f3f7; color:#7d869a; } .p-amber{background:#fff4e0;color:#c27c00;}
+.tog { width:66px; height:38px; border-radius:19px; background:#d7dde8; position:relative; flex:none; }
+.tog::after { content:""; position:absolute; top:4px; left:4px; width:30px; height:30px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+.tog.on { background:var(--blue); } .tog.on::after { left:32px; }
+.radio { width:28px; height:28px; border-radius:50%; border:2.5px solid #c3cbd8; flex:none; position:relative; }
+.radio.on { border-color:var(--blue); } .radio.on::after { content:""; position:absolute; inset:5px; border-radius:50%; background:var(--blue); }
+.chk { width:28px; height:28px; border-radius:8px; border:2.5px solid #c3cbd8; flex:none; display:grid; place-items:center; }
+.chk.on { background:var(--blue); border-color:var(--blue); } .chk.on::after { content:"✓"; color:#fff; font-weight:800; font-size:18px; }
+.opt { display:flex; align-items:center; gap:16px; padding:18px 20px; border:2px solid #e6ebf3; border-radius:16px; margin-bottom:14px; font-size:22px; font-weight:600; }
+.opt.on { border-color:var(--blue); background:#f3f8ff; }
+.thumb { width:88px; height:88px; border-radius:18px; background:var(--soft); display:grid; place-items:center; flex:none; }
+.thumb svg { width:46px; height:46px; }
+.bar { height:16px; border-radius:8px; background:#e8edf5; overflow:hidden; } .bar > i { display:block; height:100%; background:var(--blue); border-radius:8px; }
+.okc { width:34px; height:34px; border-radius:50%; background:var(--green); color:#fff; display:grid; place-items:center; font-weight:800; font-size:20px; flex:none; }
+#cursor { position:absolute; left:0; top:0; width:44px; height:44px; z-index:50; pointer-events:none; filter:drop-shadow(0 3px 4px rgba(0,0,0,.25)); transform-origin:6px 4px; }
+#ripple { position:absolute; width:70px; height:70px; margin:-35px 0 0 -35px; border-radius:50%; border:3px solid var(--blue); z-index:49; opacity:0; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.stat { border:2px solid #e9eef5; border-radius:18px; padding:18px 20px; }
+.stat .n { font-weight:700; font-size:38px; }
+.stat .k { font-size:17px; color:var(--gray); font-weight:600; }
+table.mini { width:100%; border-collapse:collapse; font:18px "Open Sans"; }
+table.mini td { padding:11px 8px; border-bottom:1.5px solid #eef2f7; } table.mini tr:first-child td { font:700 16px Quicksand; color:var(--gray); text-transform:uppercase; letter-spacing:.06em; }
+</style></head>
+<body><div id="stage"></div>
+<svg id="cursorSvg" style="display:none"></svg>
+<script>
+/* ---------------- icons (stroke paths, 24x24) ---------------- */
+const I = {
+	card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+	layers:'<path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>',
+	truck:'<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+	trend:'<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
+	percent:'<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+	tag:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+	msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/>',
+	chart:'<path d="M3 3v18h18"/><path d="M7 15v3M12 10v8M17 6v12"/>',
+	download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/>',
+	sync:'<path d="M21 12a9 9 0 0 1-15.5 6.3L3 16M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/>',
+	switch:'<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>',
+	upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5M12 3v12"/>',
+	retry:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+	bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+	lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+	mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+	ff:'<path d="m13 19 9-7-9-7zM2 19l9-7-9-7z"/>',
+	rotate:'<path d="M1 4v6h6"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>',
+	toggle:'<rect x="1" y="6" width="22" height="12" rx="6"/><circle cx="16" cy="12" r="3"/>',
+	pause:'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+	gift:'<path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+	help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+	box:'<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+	coffee:'<path d="M17 8h1a4 4 0 0 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v3M10 2v3M14 2v3"/>',
+	user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+	cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+	file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/>',
+	play:'<polygon points="6 4 20 12 6 20 6 4"/>',
+	cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>',
+};
+const svg = (k, cls = 'ic') => `<svg class="${cls}" viewBox="0 0 24 24">${I[k]}</svg>`;
+
+/* ---------------- building blocks ---------------- */
+const win = (x, y, w, head, body, anim = '0.2 0.7 up') => `<div class="win" style="left:${x}px;top:${y}px;width:${w}px" data-in="${anim}"><div class="win-h"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>${head.startsWith('url:') ? `<div class="url">${head.slice(4)}</div>` : `<div class="win-t">${head}</div>`}</div><div class="win-b">${body}</div></div>`;
+const card = (x, y, w, body, anim = '0.7 0.6 left', extra = '') => `<div class="card" style="left:${x}px;top:${y}px;width:${w}px;${extra}" data-in="${anim}">${body}</div>`;
+const badge = (x, y, icon, at = 1.0) => `<div class="badge" style="left:${x}px;top:${y}px" data-in="${at} 0.5 pop">${svg(icon, '')}</div>`;
+const decor = (v) => v === 'a'
+	? `<div class="blob" style="width:520px;height:520px;left:840px;top:-110px"></div><div class="dots" style="left:72px;top:860px"></div>`
+	: `<div class="blob" style="width:600px;height:600px;left:860px;top:720px"></div><div class="dots" style="left:44px;top:840px"></div>`;
+const typed = (text, start, dur, cls = '') => `<span data-type="${start} ${dur}" data-text="${text}" class="${cls}"></span>`;
+const field = (label, inner, opts = '') => `${label ? `<div class="lbl">${label}</div>` : ''}<div class="fld ${opts}">${inner}</div>`;
+const swap = (t, a, b) => `<span data-swap="${t}"><span class="a">${a}</span><span class="b">${b}</span></span>`;
+
+/* ---------------- scenes ---------------- */
+// Each scene: html, cursor: [[time, target]], clicks: [times], dur (s).
+const S = {};
+
+S['stripe-paypal-auto-renewals'] = {
+	html: decor('a') +
+		win(72, 150, 610, 'url:yourstore.com/checkout', `
+			<div class="row" style="margin-bottom:26px"><div class="thumb">${svg('coffee')}</div><div><div class="h">Coffee Club Box</div><div class="t22 muted">$29.00 / month</div></div></div>
+			<div class="lbl">Payment method</div>
+			<div class="opt" data-on="1.3" data-oncls="on" id="o1"><span class="radio" data-on="1.3"></span>${svg('card')} Credit card (Stripe)</div>
+			<div class="opt"><span class="radio"></span>${svg('mail')} PayPal</div>
+			${field('', typed('4242  4242  4242  4242', 1.8, 1.2), 'focus" data-on="1.6')}
+			<div class="btn wide" id="sub" data-press="3.4">Subscribe now</div>`) +
+		card(732, 230, 476, `
+			<div class="eyebrow">Renewals</div>
+			<div class="list">
+				<div class="between" data-in="3.7 0.4 up"><span class="b">Nov 1</span><span>$29.00</span><span class="pill p-green">Paid</span></div>
+				<div class="between" data-in="4.0 0.4 up"><span class="b">Dec 1</span><span>$29.00</span><span class="pill p-blue">Auto-charge</span></div>
+				<div class="between" data-in="4.3 0.4 up"><span class="b">Jan 1</span><span>$29.00</span><span class="pill p-blue">Auto-charge</span></div>
+			</div>`, '0.8 0.6 left') +
+		badge(1132, 120, 'card'),
+	cursor: [[0, [700, 1000]], [1.0, '#o1'], [1.5, '#o1'], [2.9, '#sub'], [4.6, [1000, 930]]], clicks: [1.3, 3.4], dur: 5.6,
+};
+
+S['variable-subscription-products'] = {
+	html: decor('b') +
+		win(72, 150, 610, 'Variations', `
+			<div class="list">
+				${[['250 g', '$15.00'], ['500 g', '$27.00'], ['1 kg', '$49.00']].map((v, i) => `<div class="between" data-in="${0.9 + i * 0.3} 0.4 up"><div class="row"><span class="pill p-blue">#${i + 1}</span><span class="b t24">${v[0]}</span></div><span class="t22">${v[1]} <span class="muted">/ month</span></span></div>`).join('')}
+			</div>
+			<div class="lbl" style="margin-top:22px">Bill every</div>
+			<div class="seg"><div class="on">1 month</div><div>3 months</div><div>Year</div></div>
+			<div class="row t20 muted">${svg('layers')} Own price, trial &amp; sign-up fee per variation</div>`) +
+		card(732, 250, 476, `
+			<div class="thumb" style="width:100%;height:190px;margin-bottom:24px"><svg class="ic" style="width:90px;height:90px" viewBox="0 0 24 24">${I.coffee}</svg></div>
+			<div class="h" style="margin-bottom:6px">Coffee Subscription</div>
+			<div class="big">${swap(2.9, '$15.00', '$27.00')}<span class="t22 muted"> / month</span></div>
+			<div class="seg" style="margin:20px 0 0"><div data-off="2.9" class="on">250 g</div><div data-on="2.9" id="v2">500 g</div><div>1 kg</div></div>`, '0.6 0.6 left') +
+		badge(1132, 140, 'layers'),
+	cursor: [[0, [700, 1000]], [1.8, [1000, 1000]], [2.6, '#v2'], [4.4, [1100, 1000]]], clicks: [2.9], dur: 5.4,
+};
+
+S['separate-shipping-schedule'] = {
+	html: decor('a') +
+		win(72, 150, 610, 'Subscription', `
+			${field('Subscription price', '90.00<span class="suf">$</span>')}
+			<div class="lbl">Bill every</div>
+			<div class="seg"><div>1 month</div><div class="on">3 months</div><div>Year</div></div>
+			<div class="lbl">Ship every</div>
+			<div class="fld focus" data-on="1.4" id="ship">${typed('1', 1.7, 0.3)}<span class="suf" style="width:150px;font-size:20px">Month</span></div>`) +
+		card(732, 280, 476, `
+			<div class="eyebrow">Schedule</div>
+			<div class="b t22" style="margin-bottom:12px">Billed</div>
+			<div class="row" style="gap:10px;margin-bottom:24px">${['Jan', 'Feb', 'Mar', 'Apr'].map((m, i) => `<span class="pill ${i % 3 === 0 ? 'p-blue' : 'p-gray'}" style="flex:1;justify-content:center" data-in="${2.4 + i * 0.15} 0.3 pop">${m}</span>`).join('')}</div>
+			<div class="b t22" style="margin-bottom:12px">Shipped</div>
+			<div class="row" style="gap:10px">${['Jan', 'Feb', 'Mar', 'Apr'].map((m, i) => `<span class="pill p-green" style="flex:1;justify-content:center" data-in="${3.1 + i * 0.25} 0.3 pop">${svg('box', 'ic" style="width:18px;height:18px;stroke:currentColor')}${m}</span>`).join('')}</div>`) +
+		badge(1132, 150, 'truck'),
+	cursor: [[0, [700, 1000]], [1.2, '#ship'], [2.4, '#ship'], [4.6, [1050, 980]]], clicks: [1.4], dur: 5.6,
+};
+
+S['price-change-for-existing-subscribers'] = {
+	html: decor('b') +
+		win(72, 150, 610, 'Existing Subscribers: Price', `
+			<div class="between t22" style="margin-bottom:22px"><span class="muted">Current price</span><span class="b">$29.00 / month</span></div>
+			${field('New price', typed('35.00', 1.2, 0.7) + '<span class="suf">$</span>', 'focus" data-on="1.0" id="np')}
+			<div class="lbl">Apply from</div>
+			<div class="seg"><div class="on">Next renewal</div><div>A date</div></div>
+			<div class="row t22" style="margin-bottom:26px"><span class="chk" data-on="2.4" id="em"></span> Email subscribers about the change</div>
+			<div class="btn wide" id="upd" data-press="3.3">Update 128 subscriptions</div>`) +
+		card(732, 300, 476, `
+			<div class="row" style="margin-bottom:18px">${svg('mail')}<span class="b t22">Your price is changing</span></div>
+			<div class="row" style="gap:18px;margin-bottom:12px"><span class="t26 muted" style="text-decoration:line-through">$29.00</span><span class="t26">→</span><span class="big" style="font-size:40px">$35.00</span></div>
+			<div class="t20 muted">From your next renewal on Jan 1</div>`, '3.6 0.6 left') +
+		badge(1132, 150, 'trend', 3.9),
+	cursor: [[0, [700, 1000]], [0.9, '#np'], [2.1, '#em'], [2.9, '#upd'], [4.6, [1050, 1000]]], clicks: [1.0, 2.4, 3.3], dur: 5.6,
+};
+
+S['subscription-coupon-codes'] = {
+	html: decor('a') +
+		win(72, 150, 610, 'Coupon data', `
+			${field('Coupon code', typed('WELCOME50', 0.9, 0.9), 'focus" data-on="0.8" id="cc')}
+			${field('Discount type', 'Recurring % discount<span class="chev"></span>')}
+			<div class="grid2">
+				<div>${field('Amount', typed('50', 2.0, 0.3) + '<span class="suf">%</span>')}</div>
+				<div>${field('Active for payments', typed('3', 2.5, 0.2))}</div>
+			</div>
+			<div class="btn" id="pub" data-press="3.1" style="float:right">Publish</div><div style="clear:both"></div>`) +
+		card(732, 270, 476, `
+			<div class="eyebrow">Cart</div>
+			<div class="between t22" style="margin-bottom:16px"><span>Coffee Club Box</span><span>$30.00 / mo</span></div>
+			<div class="between t22" style="margin-bottom:16px" data-in="3.6 0.4 up"><span class="pill p-blue">${svg('tag', 'ic" style="width:18px;height:18px;stroke:currentColor')}WELCOME50</span><span style="color:var(--green)" class="b">−$15.00</span></div>
+			<div class="t20 muted" style="margin-bottom:18px" data-in="3.9 0.4 up">50% off your first 3 payments</div>
+			<div class="between" style="border-top:2px solid #eef2f7;padding-top:18px"><span class="t22 muted">Total</span><span class="big">${swap(3.7, '$30.00', '$15.00')}</span></div>`, '0.6 0.6 left') +
+		badge(1132, 140, 'percent'),
+	cursor: [[0, [700, 1000]], [0.7, '#cc'], [2.8, '#pub'], [4.6, [1050, 1000]]], clicks: [0.8, 3.1], dur: 5.6,
+};
+
+S['cancellation-survey-and-retention-offer'] = {
+	html: decor('b') +
+		win(72, 120, 640, 'url:yourstore.com/my-account', `
+			<div class="h" style="margin-bottom:20px">Cancel subscription #1042</div>
+			<div class="lbl">Why are you cancelling?</div>
+			<div class="opt" id="r1" data-on="1.2"><span class="radio" data-on="1.2"></span>It's too expensive</div>
+			<div class="opt"><span class="radio"></span>I don't use it enough</div>
+			<div class="opt"><span class="radio"></span>I found a better alternative</div>
+			<div style="background:#f3f8ff;border:2px solid #cfe0ff;border-radius:18px;padding:22px 24px;margin-top:10px" data-in="1.7 0.5 pop">
+				<div class="b t24" style="margin-bottom:6px">Before you go: a special offer</div>
+				<div class="t20 muted" style="margin-bottom:16px">Stay and get 20% off your next 2 payments.</div>
+				<div class="btn" id="acc" data-press="3.0">Accept offer and stay</div>
+			</div>`) +
+		card(772, 360, 440, `
+			<div class="row" style="margin-bottom:14px"><span class="okc">✓</span><span class="b t24">Subscription saved</span></div>
+			<div class="between t22"><span class="muted">Status</span><span class="pill p-green">Active</span></div>
+			<div class="between t22" style="margin-top:12px"><span class="muted">Next payment</span><span class="b">$23.20</span></div>`, '3.3 0.6 left') +
+		badge(1132, 160, 'msg', 3.6),
+	cursor: [[0, [700, 1000]], [1.0, '#r1'], [2.5, '#acc'], [4.6, [1080, 950]]], clicks: [1.2, 3.0], dur: 5.6,
+};
+
+S['cancellations-report'] = {
+	html: decor('a') +
+		win(72, 150, 640, 'Cancellations', `
+			<div class="grid2" style="margin-bottom:26px">
+				<div class="stat"><div class="n"><span data-count="0.8 1.2" data-to="24"></span></div><div class="k">Cancellations</div></div>
+				<div class="stat"><div class="n"><span data-count="0.8 1.2" data-to="19"></span></div><div class="k">Survey answers</div></div>
+				<div class="stat"><div class="n" style="color:var(--blue)"><span data-count="0.8 1.2" data-to="7"></span></div><div class="k">Offers accepted</div></div>
+				<div class="stat"><div class="n" style="color:var(--green)"><span data-count="0.8 1.2" data-to="29" data-suf="%"></span></div><div class="k">Saved by the offer</div></div>
+			</div>
+			<div class="lbl">Why customers cancel</div>
+			${[['Too expensive', 42], ['Not using it', 26], ['Found alternative', 18], ['Other', 14]].map((r, i) => `<div style="margin-bottom:14px"><div class="between t20" style="margin-bottom:6px"><span>${r[0]}</span><span class="muted">${r[1]}%</span></div><div class="bar"><i data-grow="${1.8 + i * 0.2} 0.8" data-w="${r[1] * 2}"></i></div></div>`).join('')}`) +
+		card(772, 250, 440, `
+			<div class="eyebrow">Top reason</div>
+			<div class="h" style="margin-bottom:8px">Too expensive</div>
+			<div class="big">42%</div>
+			<div class="t20 muted" style="margin-top:8px">Try a retention coupon for this group.</div>`, '3.2 0.6 left') +
+		badge(1132, 120, 'chart'),
+	cursor: [[0, [800, 1050]], [2.5, [500, 760]], [4.6, [1050, 980]]], clicks: [], dur: 5.6,
+};
+
+S['csv-report-exports'] = {
+	html: decor('b') +
+		win(72, 150, 640, 'Report Exports', `
+			${[['Payments', 'Every renewal, refund and fee'], ['Monthly summary', 'Revenue, new &amp; cancelled'], ['Cancellations', 'With survey answers']].map((r, i) => `<div class="between" style="padding:20px 0;border-bottom:2px solid #eef2f7" data-in="${0.8 + i * 0.2} 0.4 up"><div><div class="b t24">${r[0]}</div><div class="t20 muted">${r[1]}</div></div><div class="btn ghost" style="height:58px;padding:0 22px;font-size:20px" ${i === 0 ? 'id="dl" data-press="2.2"' : ''}>${svg('download', 'ic" style="stroke:currentColor')}CSV</div></div>`).join('')}
+			<div class="row t20 muted" style="margin-top:20px">${svg('cal')} Period: Last 30 days</div>`) +
+		card(752, 330, 460, `
+			<div class="row" style="margin-bottom:16px">${svg('file')}<span class="b t22">payments-november.csv</span></div>
+			<table class="mini"><tr><td>Date</td><td>Order</td><td>Total</td></tr>
+			${[['Nov 01', '#1042', '$29.00'], ['Nov 03', '#1051', '$49.00'], ['Nov 07', '#1063', '$15.00'], ['Nov 12', '#1077', '$27.00']].map((r, i) => `<tr data-in="${2.9 + i * 0.25} 0.3 up"><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</table>`, '2.5 0.6 left') +
+		badge(1132, 150, 'download', 2.8),
+	cursor: [[0, [700, 1000]], [1.8, '#dl'], [4.6, [1050, 1000]]], clicks: [2.2], dur: 5.6,
+};
+
+S['mailchimp-and-klaviyo-sync'] = {
+	html: decor('a') +
+		win(72, 150, 610, 'Integrations', `
+			<div class="between" style="padding:16px 0"><span class="b t24">Sync to Mailchimp</span><span class="tog" id="t1" data-on="1.1"></span></div>
+			<div class="between" style="padding:16px 0;border-bottom:2px solid #eef2f7;margin-bottom:22px"><span class="b t24">Sync to Klaviyo</span><span class="tog" id="t2" data-on="1.9"></span></div>
+			${field('Status tag prefix', 'Subscription:')}
+			<div class="btn ghost" id="sync" data-press="2.8">${svg('sync', 'ic" style="stroke:currentColor')} Sync all customers</div>`) +
+		card(732, 300, 476, `
+			<div class="row" style="margin-bottom:20px"><div class="thumb" style="width:64px;height:64px;border-radius:50%">${svg('user')}</div><div><div class="b t24">Sarah Miller</div><div class="t20 muted">sarah@example.com</div></div></div>
+			<div class="lbl">Tags</div>
+			<div style="display:flex;flex-wrap:wrap;gap:10px">
+				<span class="pill p-green" data-in="3.2 0.35 pop">Subscription: Active</span>
+				<span class="pill p-blue" data-in="3.5 0.35 pop">Subscribed: Coffee Club Box</span>
+				<span class="pill p-amber" data-in="3.8 0.35 pop">Next payment: Dec 1</span>
+			</div>`, '0.8 0.6 left') +
+		badge(1132, 140, 'sync'),
+	cursor: [[0, [700, 1000]], [0.9, '#t1'], [1.7, '#t2'], [2.5, '#sync'], [4.6, [1050, 980]]], clicks: [1.1, 1.9, 2.8], dur: 5.6,
+};
+
+S['plan-switching-with-proration'] = {
+	html: decor('b') +
+		win(72, 140, 620, 'url:yourstore.com/my-account', `
+			<div class="h" style="margin-bottom:22px">Switch plan</div>
+			<div class="opt" data-off="1.4" data-oncls="on" style="" ><span class="radio" data-off="1.4"></span><span style="flex:1">Basic</span><span class="muted">$15 / mo</span></div>
+			<div class="opt" id="plus" data-on="1.4"><span class="radio" data-on="1.4"></span><span style="flex:1">Plus</span><span class="muted">$27 / mo</span></div>
+			<div class="opt"><span class="radio"></span><span style="flex:1">Pro</span><span class="muted">$49 / mo</span></div>
+			<div class="t22" style="background:#f3f8ff;border-radius:14px;padding:16px 20px;margin:10px 0 24px" data-in="1.7 0.4 up">Pay <b style="color:var(--blue)">$8.40</b> today (prorated), then $27 / month</div>
+			<div class="btn wide" id="sw" data-press="3.0">Switch to Plus</div>`) +
+		card(752, 340, 460, `
+			<div class="row" style="margin-bottom:14px"><span class="okc">✓</span><span class="b t24">Upgraded to Plus</span></div>
+			<div class="between t22"><span class="muted">Paid today</span><span class="b">$8.40</span></div>
+			<div class="between t22" style="margin-top:12px"><span class="muted">Next payment</span><span class="b">$27.00 · Dec 1</span></div>`, '3.3 0.6 left') +
+		badge(1132, 160, 'switch', 3.6),
+	cursor: [[0, [700, 1000]], [1.1, '#plus'], [2.6, '#sw'], [4.6, [1080, 960]]], clicks: [1.4, 3.0], dur: 5.6,
+};
+
+S['import-export-and-migration'] = {
+	html: decor('a') +
+		win(72, 150, 640, 'Import Wizard', `
+			<div class="row" style="gap:10px;margin-bottom:24px"><span class="pill p-green">1 Upload</span><span class="pill p-green" data-swap-cls="1.9 p-gray p-green">2 Map</span><span class="pill p-gray" data-swap-cls="2.6 p-gray p-green">3 Preview</span><span class="pill p-gray" data-swap-cls="3.4 p-gray p-blue">4 Import</span></div>
+			<div id="dz" style="border:2.5px dashed #c9d6ea;border-radius:20px;padding:26px;text-align:center;margin-bottom:22px">
+				<div class="row" style="justify-content:center;margin-bottom:12px">${svg('file')}<span class="b t24">subscriptions.csv</span></div>
+				<div class="t20 muted">From WooCommerce Subscriptions</div>
+			</div>
+			<div class="between t20" style="margin-bottom:8px"><span>Importing rows…</span><span class="b"><span data-count="1.2 2.6" data-to="124"></span> / 124</span></div>
+			<div class="bar"><i data-grow="1.2 2.6" data-w="100"></i></div>`) +
+		card(772, 360, 440, `
+			<div class="eyebrow">Summary</div>
+			<div class="list">
+				<div class="between"><span>Created</span><span class="pill p-green">120</span></div>
+				<div class="between"><span>Skipped (exist)</span><span class="pill p-gray">4</span></div>
+				<div class="between"><span>Errors</span><span class="pill p-blue">0</span></div>
+			</div>`, '3.9 0.6 left') +
+		badge(1132, 160, 'upload'),
+	cursor: [[0, [700, 1000]], [1.0, '#dz'], [3.0, [700, 1000]], [4.8, [1050, 980]]], clicks: [1.0], dur: 5.8,
+};
+
+S['smart-retries'] = {
+	html: decor('b') +
+		win(72, 150, 620, 'Renewal #1088', `
+			${[['p-red', 'Declined', 'Insufficient funds', 0.8], ['p-amber', 'Retry', 'In 3 days', 1.6], ['p-green', 'Paid', '$29.00 collected', 2.4]].map((s, i) => `<div class="row" style="padding:18px 0;border-bottom:2px solid #eef2f7" data-in="${s[3]} 0.4 up"><span class="pill ${s[0]}" style="width:150px;justify-content:center">${s[1]}</span><span class="t22">${s[2]}</span></div>`).join('')}
+			<div class="row t20 muted" style="margin-top:22px">${svg('retry')} Retries follow the decline reason</div>`) +
+		card(752, 360, 460, `
+			<div class="eyebrow">Not retried</div>
+			<div class="between t22" style="margin-bottom:12px"><span>Stolen card</span><span class="pill p-gray">Skip</span></div>
+			<div class="between t22"><span>Closed account</span><span class="pill p-gray">Skip</span></div>`, '3.2 0.6 left') +
+		badge(1132, 160, 'retry'),
+	cursor: [[0, [800, 1050]], [2.6, [520, 560]], [4.6, [1050, 980]]], clicks: [], dur: 5.4,
+};
+
+S['card-expiry-reminders'] = {
+	html: decor('a') +
+		win(72, 160, 620, 'url:Inbox', `
+			<div class="row" style="margin-bottom:16px">${svg('bell')}<span class="b t26">Your card expires soon</span></div>
+			<div class="t22 muted" style="margin-bottom:24px">Hi Sarah, the card used for your Coffee Club Box subscription expires at the end of the month.</div>
+			<div class="row" style="border:2px solid #e6ebf3;border-radius:16px;padding:18px 22px;margin-bottom:26px">${svg('card')}<span class="b t22" style="flex:1">Visa •••• 4242</span><span class="pill p-amber">Expires 11/26</span></div>
+			<div class="btn" id="uc" data-press="3.0">Update card</div>`, '0.2 0.7 up') +
+		card(752, 330, 460, `
+			<div class="eyebrow">Reminder sent</div>
+			<div class="row t22" style="margin-bottom:10px">${svg('cal')} 30 days before expiry</div>
+			<div class="row t22">${svg('mail')} Automatically by email</div>`, '1.4 0.6 left') +
+		badge(1132, 150, 'bell'),
+	cursor: [[0, [700, 1000]], [2.6, '#uc'], [4.6, [1050, 980]]], clicks: [3.0], dur: 5.4,
+};
+
+S['update-card-page'] = {
+	html: decor('b') +
+		win(72, 150, 610, 'url:yourstore.com/my-account/update-card', `
+			<div class="h" style="margin-bottom:22px">Update card</div>
+			${field('Card number', typed('4000  0566  5566  1881', 0.9, 1.3), 'focus" data-on="0.8" id="cn')}
+			<div class="grid2"><div>${field('Expiry', typed('08 / 29', 2.3, 0.4))}</div><div>${field('CVC', typed('•••', 2.8, 0.3))}</div></div>
+			<div class="btn wide" id="sv" data-press="3.5">${svg('lock', 'ic" style="stroke:#fff')} Save card</div>`) +
+		card(752, 360, 460, `
+			<div class="row" style="margin-bottom:14px"><span class="okc">✓</span><span class="b t24">New card saved</span></div>
+			<div class="t22 muted">Visa •••• 1881 is now used for all renewals.</div>`, '3.8 0.6 left') +
+		badge(1132, 160, 'lock', 4.0),
+	cursor: [[0, [700, 1000]], [0.7, '#cn'], [3.1, '#sv'], [4.8, [1050, 980]]], clicks: [0.8, 3.5], dur: 5.8,
+};
+
+S['card-expiring-and-price-changed-emails'] = {
+	html: decor('a') +
+		win(72, 150, 640, 'WooCommerce › Emails', `
+			${[['Renewal reminder', 0], ['Payment failed', 0], ['Card expiring', 1], ['Price changed', 1]].map((e, i) => `<div class="between" style="padding:18px 0;border-bottom:2px solid #eef2f7" data-in="${0.7 + i * 0.2} 0.4 up"><div class="row">${svg('mail')}<span class="t24 ${e[1] ? 'b' : ''}">${e[0]}</span>${e[1] ? '<span class="pill p-blue" style="font-size:15px">Pro</span>' : ''}</div><span class="tog ${e[1] ? '' : 'on'}" ${e[1] ? `data-on="${i === 2 ? 1.9 : 2.5}" id="e${i}"` : ''}></span></div>`).join('')}`) +
+		card(772, 380, 440, `
+			<div class="eyebrow">Subject</div>
+			<div class="b t24" style="margin-bottom:10px">Your subscription price is changing</div>
+			<div class="t20 muted">Sent automatically when you update prices for existing subscribers.</div>`, '3.0 0.6 left') +
+		badge(1132, 170, 'mail', 3.3),
+	cursor: [[0, [700, 1000]], [1.7, '#e2'], [2.3, '#e3'], [4.6, [1050, 980]]], clicks: [1.9, 2.5], dur: 5.4,
+};
+
+S['renew-early'] = {
+	html: decor('b') +
+		win(72, 150, 610, 'url:yourstore.com/my-account', `
+			<div class="between" style="margin-bottom:22px"><span class="h">Subscription #1042</span><span class="pill p-green">Active</span></div>
+			<div class="list" style="margin-bottom:24px">
+				<div class="between"><span class="muted">Plan</span><span class="b">Coffee Club Box</span></div>
+				<div class="between"><span class="muted">Next payment</span><span class="b">${swap(3.0, 'Dec 1', 'Jan 1')}</span></div>
+			</div>
+			<div class="row"><div class="btn" id="rn" data-press="2.2">${svg('ff', 'ic" style="stroke:#fff')} Renew now</div><div class="btn ghost">Pause</div></div>`) +
+		card(752, 360, 460, `
+			<div class="row" style="margin-bottom:14px"><span class="okc">✓</span><span class="b t24">Renewal paid early</span></div>
+			<div class="t22 muted">$29.00 charged. Your next payment moved to Jan 1.</div>`, '2.6 0.6 left') +
+		badge(1132, 160, 'ff', 2.9),
+	cursor: [[0, [700, 1000]], [1.8, '#rn'], [4.4, [1050, 980]]], clicks: [2.2], dur: 5.2,
+};
+
+S['resubscribe'] = {
+	html: decor('a') +
+		win(72, 150, 610, 'url:yourstore.com/my-account', `
+			<div class="between" style="margin-bottom:22px"><span class="h">Subscription #0987</span>${swap(2.3, '<span class="pill p-red">Cancelled</span>', '<span class="pill p-green">Active</span>')}</div>
+			<div class="list" style="margin-bottom:24px">
+				<div class="between"><span class="muted">Plan</span><span class="b">Yoga Membership</span></div>
+				<div class="between"><span class="muted">Price</span><span class="b">$19.00 / month</span></div>
+			</div>
+			<div class="btn" id="rs" data-press="1.9">${svg('rotate', 'ic" style="stroke:#fff')} Resubscribe</div>`) +
+		card(752, 360, 460, `
+			<div class="row" style="margin-bottom:14px"><span class="okc">✓</span><span class="b t24">Welcome back!</span></div>
+			<div class="t22 muted">Same plan, same price. No need to sign up again.</div>`, '2.5 0.6 left') +
+		badge(1132, 160, 'rotate', 2.8),
+	cursor: [[0, [700, 1000]], [1.5, '#rs'], [4.4, [1050, 980]]], clicks: [1.9], dur: 5.2,
+};
+
+S['auto-renew-toggle'] = {
+	html: decor('b') +
+		win(72, 160, 610, 'url:yourstore.com/my-account', `
+			<div class="h" style="margin-bottom:22px">Subscription #1042</div>
+			<div class="between" style="padding:20px 0;border-top:2px solid #eef2f7;border-bottom:2px solid #eef2f7;margin-bottom:22px"><div><div class="b t24">Auto renew</div><div class="t20 muted">${swap(1.9, 'Off: pay each renewal manually', 'On: charged automatically')}</div></div><span class="tog" id="ar" data-on="1.9"></span></div>
+			<div class="between t22"><span class="muted">Next payment</span><span class="b">Dec 1 · $29.00</span></div>`) +
+		card(752, 380, 460, `
+			<div class="row" style="margin-bottom:14px"><span class="okc">✓</span><span class="b t24">Automatic renewal is on</span></div>
+			<div class="t22 muted">Your saved card will be charged on Dec 1.</div>`, '2.4 0.6 left') +
+		badge(1132, 170, 'toggle', 2.7),
+	cursor: [[0, [700, 1000]], [1.5, '#ar'], [4.4, [1050, 980]]], clicks: [1.9], dur: 5.2,
+};
+
+S['pause-limit'] = {
+	html: decor('a') +
+		win(72, 150, 610, 'Settings › General', `
+			${field('Allow customers to pause', 'Yes<span class="chev"></span>')}
+			${field('Max pauses per subscription', typed('2', 1.2, 0.3), 'focus" data-on="1.0" id="mx')}
+			<div class="btn" id="sav" data-press="2.0">Save changes</div>`) +
+		card(752, 330, 460, `
+			<div class="b t24" style="margin-bottom:16px">Pause subscription</div>
+			<div class="t22 muted" style="margin-bottom:20px">You can pause <b style="color:var(--blue)">2 more times</b>.</div>
+			<div class="row" style="gap:10px"><span class="pill p-blue">1 month</span><span class="pill p-gray">2 months</span><span class="pill p-gray">3 months</span></div>`, '2.5 0.6 left') +
+		badge(1132, 150, 'pause', 2.8),
+	cursor: [[0, [700, 1000]], [0.8, '#mx'], [1.7, '#sav'], [4.4, [1050, 980]]], clicks: [1.0, 2.0], dur: 5.2,
+};
+
+S['one-free-trial-per-customer'] = {
+	html: decor('b') +
+		win(72, 150, 610, 'Settings › General', `
+			<div class="lbl">Free trial limit</div>
+			<div class="seg" style="flex-direction:column;gap:6px"><div data-off="1.3" class="on">No limit</div><div data-on="1.3" id="pp">One per product</div><div>One per store</div></div>
+			<div class="btn" id="sv2" data-press="2.2">Save changes</div>`) +
+		card(732, 360, 480, `
+			<div class="row" style="margin-bottom:12px">${svg('gift')}<span class="b t24">Free trial already used</span></div>
+			<div class="t22 muted">You've had a free trial of this product, so your first payment is taken today.</div>`, '2.7 0.6 left') +
+		badge(1132, 170, 'gift', 3.0),
+	cursor: [[0, [700, 1000]], [1.0, '#pp'], [1.9, '#sv2'], [4.4, [1050, 980]]], clicks: [1.3, 2.2], dur: 5.2,
+};
+
+S['in-plugin-help-tab'] = {
+	html: decor('a') +
+		win(72, 140, 640, 'Help', `
+			<div class="thumb" style="width:100%;height:200px;margin-bottom:22px;position:relative"><div style="width:84px;height:84px;border-radius:50%;background:var(--blue);display:grid;place-items:center">${svg('play', 'ic" style="stroke:#fff;fill:#fff;width:34px;height:34px')}</div></div>
+			<div class="lbl">Frequently asked questions</div>
+			<div class="opt" id="q1" data-on="1.6"><span style="flex:1">How do automatic renewals work?</span><span class="b">${swap(1.6, '+', '−')}</span></div>
+			<div class="t20 muted" style="padding:0 20px 14px" data-in="1.8 0.4 up">The saved card or PayPal account is charged on each renewal date.</div>
+			<div class="opt"><span style="flex:1">Can customers switch plans?</span><span class="b">+</span></div>`) +
+		card(772, 400, 440, `
+			<div class="b t24" style="margin-bottom:10px">Need help?</div>
+			<div class="t20 muted" style="margin-bottom:20px">Docs, videos and support, right inside the plugin.</div>
+			<div class="btn" style="height:58px;font-size:20px">Contact support</div>`, '2.6 0.6 left') +
+		badge(1132, 170, 'help', 2.9),
+	cursor: [[0, [700, 1000]], [1.3, '#q1'], [4.4, [1050, 980]]], clicks: [1.6], dur: 5.2,
+};
+
+/* ---------------- engine ---------------- */
+const key = new URLSearchParams(location.search).get('s');
+const scene = S[key];
+window.SCENES = Object.keys(S);
+const stage = document.getElementById('stage');
+if (scene) {
+	stage.innerHTML = scene.html + '<div id="ripple"></div><svg id="cursor" viewBox="0 0 24 24"><path d="M4 2 4 19 8.5 14.5 11.5 21 14.5 19.7 11.5 13.3 18 13.3Z" fill="#1b2140" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+	window.DUR = scene.dur;
+	// Group the cards (not the background shapes) and fit them to the canvas, centred.
+	const g = document.createElement("div"); g.id = "group"; g.style.cssText = "position:absolute;left:0;top:0;width:1280px;height:1120px;transform-origin:0 0";
+	[...stage.children].filter((c) => !c.classList.contains("blob") && !c.classList.contains("dots") && c.id !== "cursor" && c.id !== "ripple").forEach((c) => g.appendChild(c));
+	stage.insertBefore(g, document.getElementById("ripple"));
+	// Short scenes: stack the floating card below-right of the window (diagonal), badge on the window corner.
+	const W = g.querySelector(".win"), C = g.querySelector(".card"), B = g.querySelector(".badge");
+	if (W && C && W.offsetHeight + C.offsetHeight + 28 <= 780) {
+		W.style.left = "0px"; W.style.top = "0px";
+		C.style.left = Math.round(W.offsetWidth * 0.36) + "px"; C.style.top = (W.offsetHeight + 28) + "px";
+		if (B) { B.style.left = (W.offsetWidth - 56) + "px"; B.style.top = "-56px"; }
+	} else if (W && C) {
+		// Tall scenes: card beside the window, a little lower; badge on the card corner.
+		W.style.left = "0px"; W.style.top = "0px";
+		C.style.width = Math.min(C.offsetWidth, 450) + "px";
+		C.style.left = (W.offsetWidth + 36) + "px"; C.style.top = Math.max(90, Math.round((W.offsetHeight - C.offsetHeight) / 2) + 50) + "px";
+		if (B) { B.style.left = (W.offsetWidth + 36 + C.offsetWidth - 70) + "px"; B.style.top = (parseFloat(C.style.top) - 80) + "px"; }
+	}
+	let x1 = 1e9, y1 = 1e9, x2 = 0, y2 = 0;
+	[...g.children].forEach((c) => { const r = { l: c.offsetLeft, t: c.offsetTop, r: c.offsetLeft + c.offsetWidth, b: c.offsetTop + c.offsetHeight }; x1 = Math.min(x1, r.l); y1 = Math.min(y1, r.t); x2 = Math.max(x2, r.r); y2 = Math.max(y2, r.b); });
+	const sc = Math.min(1.45, 1170 / (x2 - x1), 980 / (y2 - y1));
+	const tx = 640 - ((x1 + x2) / 2) * sc, ty = 560 - ((y1 + y2) / 2) * sc;
+	g.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + sc + ")";
+}
+const clamp = (v) => Math.max(0, Math.min(1, v));
+const ease = (p) => 1 - Math.pow(1 - p, 3);
+const easeIO = (p) => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const spring = (p) => p === 1 ? 1 : 1 - Math.pow(2, -9 * p) * Math.cos(p * 9);
+const rel = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+
+window.render = (t) => {
+	document.querySelectorAll('[data-in]').forEach((el) => {
+		const [s, d, k] = el.dataset.in.split(' '); const p = clamp((t - s) / d); const e = k === 'pop' ? spring(p) : ease(p);
+		el.style.opacity = Math.min(1, p * 1.6);
+		el.style.transform = k === 'up' ? `translateY(${(1 - e) * 36}px)` : k === 'left' ? `translateX(${(1 - e) * 60}px)` : k === 'pop' ? `scale(${0.5 + 0.5 * e})` : '';
+	});
+	document.querySelectorAll('[data-type]').forEach((el) => {
+		const [s, d] = el.dataset.type.split(' ').map(Number); const txt = el.dataset.text; const n = Math.round(clamp((t - s) / d) * txt.length);
+		const typing = t >= s - 0.3 && t < s + d + 0.5;
+		el.innerHTML = txt.slice(0, n) + (typing && Math.floor(t * 2.5) % 2 === 0 ? '<span class="caret"></span>' : '');
+	});
+	document.querySelectorAll('[data-on]').forEach((el) => el.classList.toggle('on', t >= +el.dataset.on));
+	document.querySelectorAll('[data-off]').forEach((el) => { if (t >= +el.dataset.off) el.classList.remove('on'); else el.classList.add('on'); });
+	document.querySelectorAll('[data-swap]').forEach((el) => {
+		const p = clamp((t - el.dataset.swap) / 0.3); const a = el.querySelector('.a'), b = el.querySelector('.b');
+		a.style.display = p < 1 ? '' : 'none'; b.style.display = p >= 1 ? '' : 'none';
+		(p < 1 ? a : b).style.opacity = p < 1 ? 1 - p * 0.6 : 1;
+	});
+	document.querySelectorAll('[data-swap-cls]').forEach((el) => { const [s, a, b] = el.dataset.swapCls.split(' '); el.classList.toggle(a, t < s); el.classList.toggle(b, t >= s); });
+	document.querySelectorAll('[data-grow]').forEach((el) => { const [s, d] = el.dataset.grow.split(' ').map(Number); el.style.width = (ease(clamp((t - s) / d)) * el.dataset.w) + '%'; });
+	document.querySelectorAll('[data-count]').forEach((el) => { const [s, d] = el.dataset.count.split(' ').map(Number); el.textContent = Math.round(ease(clamp((t - s) / d)) * el.dataset.to) + (el.dataset.suf || ''); });
+	document.querySelectorAll('[data-press]').forEach((el) => el.classList.toggle('press', t >= +el.dataset.press && t < +el.dataset.press + 0.18));
+	// Cursor.
+	const pts = scene.cursor.map(([tt, tg]) => [tt, typeof tg === 'string' ? rel(document.querySelector(tg)) : tg]);
+	let pos = pts[0][1];
+	for (let i = 0; i < pts.length - 1; i++) {
+		if (t >= pts[i][0] && t <= pts[i + 1][0]) { const p = easeIO((t - pts[i][0]) / (pts[i + 1][0] - pts[i][0])); pos = [pts[i][1][0] + (pts[i + 1][1][0] - pts[i][1][0]) * p, pts[i][1][1] + (pts[i + 1][1][1] - pts[i][1][1]) * p]; }
+		if (t > pts[pts.length - 1][0]) pos = pts[pts.length - 1][1];
+	}
+	const cur = document.getElementById('cursor'); const click = scene.clicks.find((c) => t >= c - 0.08 && t < c + 0.12);
+	cur.style.transform = `translate(${pos[0] - 6}px, ${pos[1] - 4}px) scale(${click !== undefined ? 0.82 : 1})`;
+	const rp = document.getElementById('ripple'); const rc = scene.clicks.find((c) => t >= c && t < c + 0.45);
+	if (rc !== undefined) { const p = (t - rc) / 0.45; rp.style.left = pos[0] + 'px'; rp.style.top = pos[1] + 'px'; rp.style.opacity = 1 - p; rp.style.transform = `scale(${0.4 + p})`; } else rp.style.opacity = 0;
+};
+if (scene) render(+(new URLSearchParams(location.search).get('t') || scene.dur));
+</script>
+</body></html>
