@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscriptions &amp; Recurring Payments Pro for WooCommerce</title>
+<meta name="description" content="Sell subscriptions in WooCommerce with automatic Stripe and PayPal renewals, recurring coupons, a cancellation survey with retention offers, plan switching and one-click import and export.">
+<!--
+	LINKS TO SET BEFORE PUBLISHING (search for href="#todo-"):
+	#todo-buy    → the product's Add to Cart / pricing box
+	#todo-docs   → the online documentation
+	#todo-demo   → a live demo, if you have one (otherwise delete the button)
+	#todo-free   → the free plugin on WordPress.org
+-->
+<style>
+:root {
+	--ink: #14112b;
+	--body: #4a4766;
+	--muted: #7b7896;
+	--bg: #ffffff;
+	--soft: #f6f4ff;
+	--line: #e8e5f5;
+	--brand: #6d28d9;
+	--brand-2: #db2777;
+	--brand-ink: #4c1d95;
+	--ok: #059669;
+	--radius: 16px;
+	--shadow: 0 20px 50px -24px rgba(45, 20, 110, .35);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font: 17px/1.65 "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; color: var(--body); background: var(--bg); }
+img { max-width: 100%; display: block; }
+a { color: var(--brand); }
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; margin: 0 0 .5em; letter-spacing: -.01em; }
+h2 { font-size: clamp(28px, 3.4vw, 40px); }
+h3 { font-size: 22px; }
+p { margin: 0 0 1em; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+section { padding: 88px 0; }
+.eyebrow { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand); margin-bottom: 10px; }
+.center { text-align: center; }
+.lead { font-size: 19px; max-width: 720px; }
+.center .lead { margin-left: auto; margin-right: auto; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease; }
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { color: #fff; background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: 0 12px 28px -12px rgba(109, 40, 217, .7); }
+.btn-ghost { color: var(--ink); background: #fff; border: 1.5px solid var(--line); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.center .btn-row { justify-content: center; }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; padding: 72px 0 96px; background:
+	radial-gradient(900px 420px at 85% -10%, rgba(219, 39, 119, .14), transparent 60%),
+	radial-gradient(800px 500px at -10% 10%, rgba(109, 40, 217, .16), transparent 60%),
+	linear-gradient(#fbfaff, #fff); }
+.hero-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 56px; align-items: center; }
+.hero h1 { font-size: clamp(36px, 5vw, 58px); letter-spacing: -.02em; }
+.hero h1 span { background: linear-gradient(135deg, var(--brand), var(--brand-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .lead { margin-bottom: 28px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 0; list-style: none; }
+.pills li { font-size: 14px; font-weight: 600; color: var(--brand-ink); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; }
+.hero-shot { border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); background: #fff; padding: 8px; transform: perspective(1400px) rotateY(-6deg) rotateX(2deg); }
+.hero-shot img { border-radius: 10px; }
+.reqs { margin-top: 22px; font-size: 14px; color: var(--muted); }
+
+/* Highlights */
+.highlights { background: var(--ink); color: #cfcbe8; padding: 64px 0; }
+.highlights h2 { color: #fff; }
+.hl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+.hl { background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); border-radius: var(--radius); padding: 24px; }
+.hl .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); margin-bottom: 14px; }
+.hl h3 { color: #fff; font-size: 19px; }
+.hl p { margin: 0; font-size: 15px; }
+.hl a { color: #e9d5ff; font-size: 14px; font-weight: 600; text-decoration: none; }
+
+/* Feature rows */
+.feature { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center; padding: 56px 0; border-bottom: 1px solid var(--line); }
+.feature:last-child { border-bottom: 0; }
+.feature.flip .f-text { order: 2; }
+.feature ul { padding: 0; margin: 16px 0 0; list-style: none; }
+.feature li { position: relative; padding-left: 30px; margin-bottom: 10px; }
+.feature li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 20px; height: 20px; border-radius: 50%; background: #ede9fe; color: var(--brand); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--brand-2); background: #fce7f3; border-radius: 999px; padding: 3px 10px; margin-bottom: 12px; }
+.shot { border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden; background: #fff; }
+.shot.crop { max-height: 460px; }
+.shot img { width: 100%; }
+.example { margin-top: 18px; padding: 14px 18px; border-radius: 12px; background: var(--soft); font-size: 15px; }
+.example strong { color: var(--brand-ink); }
+
+/* More features */
+.more { background: var(--soft); }
+.more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.card h4 { font-size: 17px; margin-bottom: 6px; }
+.card p { margin: 0; font-size: 15px; }
+
+/* Steps */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 40px; counter-reset: s; }
+.step { position: relative; padding: 26px 22px 22px; border: 1px solid var(--line); border-radius: var(--radius); }
+.step::before { counter-increment: s; content: counter(s); position: absolute; top: -16px; left: 22px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
+.step h4 { margin-top: 6px; }
+.step p { margin: 0; font-size: 15px; }
+
+/* Use cases */
+.uses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+.use { padding: 22px; border-radius: var(--radius); background: linear-gradient(160deg, #faf5ff, #fff); border: 1px solid var(--line); }
+.use .em { font-size: 28px; }
+.use h4 { margin: 8px 0 6px; }
+.use p { margin: 0; font-size: 15px; }
+
+/* Compare */
+.compare { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 32px; font-size: 15px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.compare th, .compare td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line); }
+.compare thead th { background: var(--ink); color: #fff; font-size: 14px; }
+.compare thead th:not(:first-child), .compare td:not(:first-child) { text-align: center; width: 110px; }
+.compare .grp td { background: var(--soft); color: var(--brand-ink); font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.compare tr:last-child td { border-bottom: 0; }
+.y { color: var(--ok); font-weight: 800; }
+.n { color: #c4c1d6; }
+.table-scroll { overflow-x: auto; }
+
+/* FAQ */
+.faq { max-width: 820px; margin: 32px auto 0; }
+.faq details { border: 1px solid var(--line); border-radius: 12px; padding: 0 20px; margin-bottom: 10px; background: #fff; }
+.faq summary { cursor: pointer; list-style: none; padding: 18px 28px 18px 0; font-weight: 700; color: var(--ink); position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 0; top: 14px; font-size: 24px; color: var(--brand); }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { padding-bottom: 6px; }
+
+/* Specs + CTA */
+.specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 28px; }
+.spec { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.spec b { display: block; color: var(--ink); font-size: 18px; }
+.spec span { font-size: 14px; color: var(--muted); }
+.cta { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #f5f3ff; border-radius: 28px; padding: 56px 32px; text-align: center; }
+.cta h2 { color: #fff; }
+.cta .btn-primary { background: #fff; color: var(--brand-ink); box-shadow: none; }
+.cta .btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .5); }
+.changelog { max-width: 820px; margin: 24px auto 0; border-left: 3px solid var(--line); padding-left: 20px; }
+.changelog h4 { margin-bottom: 4px; }
+
+@media (max-width: 960px) {
+	.hero-grid, .feature { grid-template-columns: 1fr; gap: 32px; }
+	.feature.flip .f-text { order: 0; }
+	.hero-shot { transform: none; }
+	.hl-grid, .more-grid { grid-template-columns: 1fr 1fr; }
+	.steps, .uses, .specs { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+	section { padding: 60px 0; }
+	.hl-grid, .more-grid, .steps, .uses, .specs { grid-template-columns: 1fr; }
+	.steps { gap: 30px; }
+	.compare th, .compare td { padding: 10px; }
+	.compare thead th:not(:first-child), .compare td:not(:first-child) { width: 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+	<div class="wrap hero-grid">
+		<div>
+			<span class="eyebrow">WooCommerce plugin</span>
+			<h1>Subscriptions &amp; Recurring Payments <span>Pro</span> for WooCommerce</h1>
+			<p class="lead">Turn one-time buyers into monthly revenue. Sell subscription products, charge renewals automatically with Stripe and PayPal, and keep more subscribers with recurring coupons, a cancellation survey and retention offers.</p>
+			<ul class="pills">
+				<li>Stripe &amp; PayPal auto-renewals</li>
+				<li>Recurring coupons</li>
+				<li>Cancellation survey</li>
+				<li>Import &amp; export</li>
+				<li>Plan switching</li>
+			</ul>
+			<div class="btn-row">
+				<a class="btn btn-primary" href="#todo-buy">Get Pro</a>
+				<a class="btn btn-ghost" href="#todo-docs">Documentation</a>
+				<a class="btn btn-ghost" href="#todo-free">Try the free version</a>
+			</div>
+			<p class="reqs">Requires WordPress 6.5+, WooCommerce 9.0+ and PHP 7.4+. HPOS compatible.</p>
+		</div>
+		<div class="hero-shot"><img src="images/admin-subscriptions.png" alt="Subscriptions dashboard with status cards, filters and subscription list"></div>
+	</div>
+</header>
+
+<!-- ========================= HIGHLIGHTS ========================= -->
+<section class="highlights">
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow" style="color:#e9d5ff">Why stores choose it</span>
+			<h2>Everything a subscription business needs</h2>
+		</div>
+		<div class="hl-grid">
+			<div class="hl"><div class="ic">💳</div><h3>Stripe &amp; PayPal renewals</h3><p>Cards and PayPal accounts are saved at checkout and charged automatically on every renewal date.</p></div>
+			<div class="hl"><div class="ic">🏷️</div><h3>Recurring coupons</h3><p>Discount the first 3 months, every payment, or the sign-up fee. You decide how many renewals get the discount.</p></div>
+			<div class="hl"><div class="ic">💬</div><h3>Cancellation survey</h3><p>Learn why customers leave, and show a retention offer that wins them back before they cancel.</p></div>
+			<div class="hl"><div class="ic">⇅</div><h3>Import &amp; export</h3><p>Move from WooCommerce Subscriptions, YITH or SUMO, back up to CSV, or schedule automatic exports.</p></div>
+			<div class="hl"><div class="ic">🔁</div><h3>Smart payment retries</h3><p>Failed renewals are retried on a schedule, and retried only when the card decline can actually succeed.</p></div>
+			<div class="hl"><div class="ic">👤</div><h3>Customer self-service</h3><p>Customers pause, resume, switch plans, renew early and update their card from My Account.</p></div>
+		</div>
+	</div>
+</section>
+
+<!-- ========================== FEATURES ========================== -->
+<section id="features">
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">Features</span>
+			<h2>Built to grow and keep recurring revenue</h2>
+			<p class="lead">A closer look at the features store owners use every day.</p>
+		</div>
+
+		<!-- Stripe & PayPal -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Payments</span>
+				<h3>Automatic renewals with Stripe and PayPal</h3>
+				<p>Connect the official WooCommerce Stripe Gateway or WooCommerce PayPal Payments and renewals take care of themselves. The customer pays once at checkout, and each renewal order is created and charged in the background on the due date.</p>
+				<ul>
+					<li>Stripe: saved cards and Link are charged on each renewal</li>
+					<li>PayPal: renewals charged through WooCommerce PayPal Payments</li>
+					<li>Manual renewals with invoice emails for bank transfer, cheque and other gateways</li>
+					<li>Card expiry reminders and a secure Update Card page for customers</li>
+				</ul>
+			</div>
+			<div class="shot"><img src="images/settings-payment.png" alt="Payment settings for Stripe and PayPal" loading="lazy"></div>
+		</div>
+
+		<!-- Coupons -->
+		<div class="feature flip">
+			<div class="f-text">
+				<span class="tag">Marketing</span>
+				<h3>Subscription coupon codes</h3>
+				<p>Four coupon types made for subscriptions. Give a percentage or fixed discount on the recurring price, choose how many payments it applies to, or discount just the sign-up fee.</p>
+				<ul>
+					<li>Recurring % or fixed discount</li>
+					<li>Sign-up fee % or fixed discount</li>
+					<li>"Active for payments": limit the discount to the first N renewals</li>
+					<li>Works with every WooCommerce coupon restriction</li>
+				</ul>
+				<div class="example"><strong>Example:</strong> "WELCOME50" gives 50% off the first 3 months of a $30/month box. From month 4 the customer pays the full price automatically.</div>
+			</div>
+			<div class="shot"><img src="images/coupon.png" alt="Coupon with a recurring discount limited to 3 payments" loading="lazy"></div>
+		</div>
+
+		<!-- Cancellation survey -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Retention</span>
+				<h3>Cancellation survey &amp; retention offer</h3>
+				<p>Before a customer cancels, ask why. Each answer is saved, and a retention offer, such as 20% off the next two payments, gives them a reason to stay. One click on "Accept offer and stay" keeps the subscription active.</p>
+				<ul>
+					<li>Ready-made reasons with an optional comment</li>
+					<li>Retention coupon applied automatically on acceptance</li>
+					<li>Cancellations report with reasons, save rate and CSV export</li>
+				</ul>
+			</div>
+			<div class="shot crop"><img src="images/myaccount-cancel.png" alt="Cancel page with survey and retention offer" loading="lazy"></div>
+		</div>
+
+		<!-- Cancellations report -->
+		<div class="feature flip">
+			<div class="f-text">
+				<span class="tag">Insights</span>
+				<h3>See why customers leave</h3>
+				<p>The Cancellations report shows how many subscribers cancelled in any period, the reasons they gave, how many accepted your retention offer, and what they told you in their own words.</p>
+				<ul>
+					<li>Reasons chart and recent cancellations list</li>
+					<li>"Saved by the offer" rate</li>
+					<li>Payments, monthly summary and cancellations as CSV</li>
+				</ul>
+			</div>
+			<div class="shot"><img src="images/cancellations.png" alt="Cancellations report" loading="lazy"></div>
+		</div>
+
+		<!-- Import / export -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Data</span>
+				<h3>Import, export &amp; migration</h3>
+				<p>Switching from another plugin? Upload its export file and every subscription comes across, with renewals scheduled so billing continues. A preview checks each row before anything is saved, and a clear summary lists anything that needs fixing.</p>
+				<ul>
+					<li>Migrate from WooCommerce Subscriptions, YITH, SUMO or a spreadsheet</li>
+					<li>CSV, JSON, XML, Excel XML and ZIP files</li>
+					<li>Skip, update or merge subscriptions that already exist</li>
+					<li>Scheduled daily, weekly or monthly backups</li>
+				</ul>
+			</div>
+			<div class="shot"><img src="images/import-step3-preview.png" alt="Import preview showing valid, existing and invalid rows" loading="lazy"></div>
+		</div>
+
+		<!-- Plan switching -->
+		<div class="feature flip">
+			<div class="f-text">
+				<span class="tag">Customers</span>
+				<h3>Plan switching with proration</h3>
+				<p>Let customers move between plans on their own. Upgrades charge only the prorated difference today; downgrades start at the next payment. Each option tells the customer exactly what they'll pay and when.</p>
+				<ul>
+					<li>Variable subscription products with their own price, schedule and trial per variation</li>
+					<li>Renew early, resubscribe and auto-renew on/off toggle</li>
+					<li>Pause limits per subscription</li>
+				</ul>
+			</div>
+			<div class="shot crop"><img src="images/myaccount-switch.png" alt="Switch plan page in My Account" loading="lazy"></div>
+		</div>
+
+		<!-- Price change -->
+		<div class="feature">
+			<div class="f-text">
+				<span class="tag">Pricing</span>
+				<h3>Change prices for existing subscribers</h3>
+				<p>Raise or lower the price of a subscription product and decide whether existing subscribers move to it from their next renewal or from a date you choose. Customers can be emailed about the change automatically.</p>
+			</div>
+			<div class="shot"><img src="images/product-price-change.png" alt="Existing subscribers price change box" loading="lazy"></div>
+		</div>
+	</div>
+</section>
+
+<!-- ======================= MORE FEATURES ======================== -->
+<section class="more">
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">And much more</span>
+			<h2>More features in Pro</h2>
+		</div>
+		<div class="more-grid">
+			<div class="card"><h4>Free trials &amp; sign-up fees</h4><p>Trials of any length and one-time fees, plus a limit of one free trial per customer.</p></div>
+			<div class="card"><h4>Billing synchronisation</h4><p>Bill everyone on the same day of the month, with a prorated first payment.</p></div>
+			<div class="card"><h4>Separate shipping schedule</h4><p>Bill yearly and ship monthly, or any other combination.</p></div>
+			<div class="card"><h4>Smart retries</h4><p>Retry failed renewals by decline reason and skip cards that can never succeed.</p></div>
+			<div class="card"><h4>26 subscription emails</h4><p>Renewal reminders, receipts, failed payments, trial ending, card expiring and more.</p></div>
+			<div class="card"><h4>Mailchimp &amp; Klaviyo</h4><p>Sync subscribers and tag them by status for targeted campaigns.</p></div>
+			<div class="card"><h4>Subscriptions dashboard</h4><p>Status cards, search, filters, bulk actions and customisable columns.</p></div>
+			<div class="card"><h4>Webhooks</h4><p>Send signed subscription events to your CRM, ERP or automation tool.</p></div>
+			<div class="card"><h4>Built-in help</h4><p>Documentation, FAQs and video tutorials inside the plugin.</p></div>
+		</div>
+	</div>
+</section>
+
+<!-- ======================== HOW IT WORKS ======================== -->
+<section>
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">Get started</span>
+			<h2>Live in four steps</h2>
+		</div>
+		<div class="steps">
+			<div class="step"><h4>Install &amp; activate</h4><p>Upload the plugin and enter your license key.</p></div>
+			<div class="step"><h4>Connect payments</h4><p>Turn on Stripe and/or PayPal in WooCommerce.</p></div>
+			<div class="step"><h4>Create a product</h4><p>Choose Simple or Variable Subscription and set price and billing.</p></div>
+			<div class="step"><h4>Start selling</h4><p>Customers subscribe at checkout; renewals run automatically.</p></div>
+		</div>
+	</div>
+</section>
+
+<!-- ========================= USE CASES ========================== -->
+<section class="more">
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">Made for</span>
+			<h2>Any business that bills on repeat</h2>
+		</div>
+		<div class="uses">
+			<div class="use"><div class="em">📦</div><h4>Subscription boxes</h4><p>Coffee, snacks or beauty boxes with monthly shipping.</p></div>
+			<div class="use"><div class="em">🎓</div><h4>Memberships &amp; courses</h4><p>Monthly or yearly access with free trials.</p></div>
+			<div class="use"><div class="em">💻</div><h4>Software &amp; SaaS</h4><p>Plans that customers upgrade and downgrade themselves.</p></div>
+			<div class="use"><div class="em">🛠️</div><h4>Services</h4><p>Maintenance, cleaning or coaching billed on a schedule.</p></div>
+		</div>
+	</div>
+</section>
+
+<!-- ======================== FREE VS PRO ========================= -->
+<section id="compare">
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">Compare</span>
+			<h2>Free vs Pro</h2>
+			<p class="lead">Everything in the free plugin is included in Pro.</p>
+			<div class="btn-row"><a class="btn btn-ghost" href="#todo-free">Download free</a><a class="btn btn-primary" href="#todo-buy">Get Pro</a></div>
+		</div>
+		<div class="table-scroll">
+		<table class="compare">
+			<thead><tr><th>Feature</th><th>Free</th><th>Pro</th></tr></thead>
+			<tbody>
+				<tr class="grp"><td colspan="3">Products</td></tr>
+				<tr><td>Simple subscription products, free trials, sign-up fees</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Billing synchronisation</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Variable subscription products</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>Separate shipping schedule</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>Price change for existing subscribers</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr class="grp"><td colspan="3">Payments</td></tr>
+				<tr><td>Automatic renewals with Stripe and PayPal</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Manual renewals with invoice email</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Failed payment retries</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Smart retries by decline reason</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>Card expiry reminders &amp; Update Card page</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr class="grp"><td colspan="3">Customers</td></tr>
+				<tr><td>View, cancel, pause and resume in My Account</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Plan switching with proration</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>Renew early, resubscribe, auto-renew toggle</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr class="grp"><td colspan="3">Marketing &amp; retention</td></tr>
+				<tr><td>Recurring and sign-up fee coupons</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>Cancellation survey &amp; retention offer</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>One free trial per customer</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr><td>Mailchimp &amp; Klaviyo sync</td><td class="n">—</td><td class="y">✓</td></tr>
+				<tr class="grp"><td colspan="3">Admin &amp; data</td></tr>
+				<tr><td>Subscriptions dashboard &amp; 26 emails</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Import / export &amp; migration</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Webhooks</td><td class="y">✓</td><td class="y">✓</td></tr>
+				<tr><td>Cancellations report &amp; CSV report exports</td><td class="n">—</td><td class="y">✓</td></tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+</section>
+
+<!-- ============================ FAQ ============================= -->
+<section class="more" id="faq">
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">FAQ</span>
+			<h2>Frequently asked questions</h2>
+		</div>
+		<div class="faq">
+			<details><summary>Which payment gateways can charge renewals automatically?</summary><p>The official WooCommerce Stripe Gateway and WooCommerce PayPal Payments. Other gateways, such as bank transfer, work with manual renewals: the customer receives an invoice email for each renewal.</p></details>
+			<details><summary>Can I give a discount for only the first few months?</summary><p>Yes. Create a coupon with a recurring discount type and set "Active for payments", for example 3. The discount stops automatically after the third payment.</p></details>
+			<details><summary>Can I move my subscriptions from another plugin?</summary><p>Yes. The import wizard reads export files from WooCommerce Subscriptions, YITH and SUMO, as well as CSV spreadsheets. Each row is checked before import, and renewals are scheduled so billing continues.</p></details>
+			<details><summary>What happens when a renewal payment fails?</summary><p>The subscription goes on hold and the payment is retried on your schedule. The customer is emailed a link to pay. With smart retries, cards that can't succeed, such as stolen or closed cards, aren't retried.</p></details>
+			<details><summary>Can customers cancel by themselves?</summary><p>Yes, from My Account, if you allow it. In Pro you can ask them why with a short survey and show a retention offer first.</p></details>
+			<details><summary>Will I lose data when upgrading from the free version?</summary><p>No. Pro uses the same data as the free plugin, and the free version is deactivated automatically when Pro is activated.</p></details>
+			<details><summary>Is it compatible with High-Performance Order Storage (HPOS)?</summary><p>Yes. The plugin is compatible with WooCommerce HPOS and the classic order storage.</p></details>
+			<details><summary>Do subscriptions stop renewing if my license expires?</summary><p>No. Existing subscriptions keep renewing. An active license is needed for updates, support and the Pro admin features.</p></details>
+		</div>
+	</div>
+</section>
+
+<!-- ===================== SPECS & CHANGELOG ===================== -->
+<section>
+	<div class="wrap">
+		<div class="center">
+			<span class="eyebrow">Details</span>
+			<h2>Requirements</h2>
+		</div>
+		<div class="specs">
+			<div class="spec"><b>6.5+</b><span>WordPress</span></div>
+			<div class="spec"><b>9.0+</b><span>WooCommerce (tested up to 11.1)</span></div>
+			<div class="spec"><b>7.4+</b><span>PHP</span></div>
+			<div class="spec"><b>1.0.0</b><span>Current version</span></div>
+		</div>
+		<div class="changelog">
+			<h4>Version 1.0.0</h4>
+			<p>Initial release.</p>
+		</div>
+	</div>
+</section>
+
+<!-- ============================ CTA ============================= -->
+<section style="padding-top:0">
+	<div class="wrap">
+		<div class="cta">
+			<h2>Start earning recurring revenue today</h2>
+			<p class="lead" style="margin:0 auto 26px">Automatic Stripe and PayPal renewals, recurring coupons, cancellation insights and easy migration in one plugin.</p>
+			<div class="btn-row" style="justify-content:center">
+				<a class="btn btn-primary" href="#todo-buy">Get Pro</a>
+				<a class="btn btn-ghost" href="#todo-docs">Read the documentation</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+</body>
+</html>
